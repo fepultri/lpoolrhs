@@ -1,0 +1,15 @@
+---
+- name: Lpool - Test 
+  hosts: localhost
+  
+  tasks:
+  
+  - name: Shell
+    ansible.builtin.shell: date
+    
+  - name: Shell 
+    ansible.builtin.shell: hostname
+
+  - name: Mensaje
+    ansible.builtin.debug:
+      msg: "Prueba exitosa"    
