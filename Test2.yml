@@ -1,6 +1,6 @@
 ---
 - name: Lpool - Test 
-  hosts: mtyplantso7
+  hosts: 172.17.218.210
   
   tasks:
   
