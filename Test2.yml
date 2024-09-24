@@ -1,6 +1,6 @@
 ---
 - name: Lpool - Test 
-  hosts: all
+  hosts: 172.17.218.210
   
   tasks:
   
