@@ -1,6 +1,6 @@
 ---
 - name: Lpool - Test 
-  hosts: localhost
+  hosts: mtyplantso7
   
   tasks:
   
