@@ -1,6 +1,7 @@
 ---
 - hosts: all
   gather_facts: True
+  become: true
   vars:
      min_required_boot_space: 50
   tasks:
@@ -31,7 +32,6 @@
           success_msg: "/boot space ok to continue"
 
       - name: "Security updates using the YUM module"
-        become: True
         yum:        
           name: "*"
           security: yes
