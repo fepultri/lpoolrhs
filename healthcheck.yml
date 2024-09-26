@@ -1,0 +1,39 @@
+---
+- name: Health check de servidor RedHat
+  hosts: all
+  become: true
+  tasks:
+    - name: Verificar el uptime del servidor
+      command: uptime
+      register: resultado_uptime
+    - debug:
+        msg: "Uptime del servidor: {{ resultado_uptime.stdout }}"
+
+    - name: Verificar el uso de CPU
+      shell: "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1\"%\"}'"
+      register: uso_cpu
+    - debug:
+        msg: "Uso de CPU: {{ uso_cpu.stdout }}"
+
+    - name: Verificar uso de memoria
+      command: free -m
+      register: uso_memoria
+    - debug:
+        msg: "Uso de memoria: {{ uso_memoria.stdout }}"
+
+    - name: Verificar espacio en disco
+      command: df -h
+      register: espacio_disco
+    - debug:
+        msg: "Espacio en disco: {{ espacio_disco.stdout }}"
+
+    - name: Verificar servicios en ejecución
+      service_facts:
+    - debug:
+        msg: "Servicios en ejecución: {{ ansible_facts.services }}"
+
+    - name: Verificar el estado de SELinux
+      command: getenforce
+      register: estado_selinux
+    - debug:
+        msg: "Estado de SELinux: {{ estado_selinux.stdout }}"
