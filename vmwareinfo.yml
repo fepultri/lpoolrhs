@@ -1,4 +1,3 @@
----
 - name: Obtener información de máquinas virtuales de VMware
   hosts: localhost
   gather_facts: no
