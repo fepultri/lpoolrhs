@@ -1,3 +1,4 @@
----
 collections:
   - community.general
+  - community.vmware
+    version: 1.17.0
