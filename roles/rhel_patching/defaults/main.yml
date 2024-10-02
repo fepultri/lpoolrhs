@@ -1,0 +1,26 @@
+ruta_log_pre_patch: "{{ ruta_base }}/prepatch/log.txt"
+ruta_log_pos_patch: "{{ ruta_base }}/postpatch/log.txt"
+ruta_base: "/var/log/ansible-remediacion/{{ inventory_hostname }}_{{ fecha_ejecucion }}"
+ 
+ 
+ 
+patching_commands:
+- {title: "Uptime", command: "uptime"}
+- {title: "Date", command: "date"}
+- {title: "Inventario de red", command: "ifconfig -a"}
+- {title: "Inventario de red", command: "ip a"}
+- {title: "Informacion DNS", command: "cat /etc/resolv.conf"}
+- {title: "Version SO", command: "cat /etc/redhat-release"}
+- {title: "Informacion Rutas estaticas", command: "ss -rn"}
+- {title: "Estado discos", command: "df -h "}
+- {title: "Estado filesystems", command: "cat /etc/fstab "}
+
+
+antivirus_commands:
+- { dir: "/opt/isec/ens/threatprevention/bin/" , command: "./isectpdControl.sh stop" }
+- { dir: "/opt/isec/ens/esp/bin/", command: "./isecespdControl.sh stop" }
+- { dir: "/opt/McAfee/ens/tp/init/", command: "./mfetpd-control.sh stop" }
+- { dir: "/opt/McAfee/ens/esp/init/", command: "./mfeespd-control.sh stop" }
+- { dir: "/opt/McAfee/agent/bin/", command: "./macmnsvc stop" }
+- { dir: "/opt/McAfee/agent/bin/", command: "./macompatsvc stop" }
+- { dir: "/opt/McAfee/agent/bin/", command: "./masvc stop" }
