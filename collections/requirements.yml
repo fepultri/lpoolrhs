@@ -1,5 +1,5 @@
 collections:
   - community.general
 #  - ansible.posix
-  - community.vmware
+#  - community.vmware
 #  - ansible.utils
