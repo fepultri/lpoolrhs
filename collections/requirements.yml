@@ -1,3 +1,5 @@
----
 collections:
-  - name: community.vmware
+  - community.general
+#  - ansible.posix
+#  - community.vmware
+#  - ansible.utils
