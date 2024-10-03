@@ -1,0 +1,32 @@
+ ### Obtención de información de máquina virtual de VMware ###
+- name: "Liverpool - VMWare - Reversion snapshot"
+  hosts: localhost
+
+  tasks:
+  - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
+    block:  
+    - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
+      community.vmware.vmware_vm_info:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+      delegate_to: localhost
+      register: result_vmware_info
+      
+    - name: "Liverpool | Actualización RHEL | Obtener informacion de maquina virtual con IP  en VMWare"
+      ansible.builtin.set_fact:
+        vm_guest_name_info: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ip_hostname) | map(attribute='guest_name')| list }}"
+        
+    - name: "Liverpool | Actualización RHEL | Generar snapshot"
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        datacenter: "{{ result_vmware_info.virtual_machines.0.datacenter }}"
+        folder: "{{ result_vmware_info.virtual_machines.0.folder }}"
+        name: "{{ vm_guest_name_info[0] }}"
+        state: revert 
+        snapshot_name: "{{ vm_snapshot_name }}"
+        validate_certs: no
+      delegate_to: localhost
+      register: result_vmware_snapshot_revert
