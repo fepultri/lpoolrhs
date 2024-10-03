@@ -1,0 +1,18 @@
+- name: Ejecutar comando {{ exec_command }}
+  ansible.builtin.shell: >- 
+     {{ exec_command | default("date") }}
+  args:
+    executable: /bin/bash
+  register: result_command_output
+  changed_when: false
+ 
+- name: Añadir resultado de comando a archivo {{ command_output_file }}
+  ansible.builtin.lineinfile:
+    path: "{{ command_output_file }}"
+    insertafter: EOF
+    line: |
+      =========={{ command_title }}==========
+      {% for result in result_command_output.stdout_lines %}
+        {{ result }}
+      {% endfor %}
+

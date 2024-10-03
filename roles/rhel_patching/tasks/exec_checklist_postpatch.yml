@@ -1,0 +1,51 @@
+- name: T1 - Generar directorio para evidencias de postparchado
+  ansible.builtin.file:
+    path: "{{ ruta_base }}/postpatch"
+    state: directory
+    recurse: true
+  register: result_directory_postpatch
+ 
+- name: T1 - Generar directorio para evidencias de postparchado
+  ansible.builtin.file:
+    path: "{{ ruta_log_pos_patch }}"
+    state: touch
+   
+- name: T2 - Ejecutar comandos
+  ansible.builtin.include_tasks:
+    file: print_results.yml
+  vars:
+    command_output_file: "{{ ruta_log_pos_patch }}"
+    command_title: "{{ item.title }}"
+    exec_command: "{{ item.command }}"
+  loop: "{{ patching_commands }}"
+ 
+- name: T3 - Validacion de servicios
+  ansible.builtin.service_facts:
+  register: result_service_status_post
+ 
+- name: T4 - Crear diccionario de estado de servicios
+  ansible.builtin.set_fact:
+    estado_servicios_postpatch: "{{ estado_servicios_postpatch | default([]) + [{'name': item['key'], 'status': item['value'].state }] }}"
+  loop: "{{ result_service_status_post.ansible_facts.services | dict2items }}"
+  
+- debug:
+    var:   estado_servicios_postpatch
+  
+- name: T5 - Imprimir resultados
+  ansible.builtin.shell: |
+    cat "{{ ruta_log_pos_patch }}"
+  register: result_print_postpatch
+  changed_when: false
+  no_log: true
+ 
+- name: Mensaje
+  ansible.builtin.debug:
+    var: result_print_postpatch.stdout_lines
+
+- name: Compara resultados
+  ansible.builtin.shell: |
+    diff {{ ruta_log_pre_patch }} {{ ruta_log_pos_patch }}
+  register: result_compare_files
+  changed_when: false
+  failed_when: result_compare_files.rc > 1
+

@@ -1,0 +1,18 @@
+---
+# tasks file for rhel_patching
+- name: Liverpool | T1 | Ejecutar snapshot de VMWare
+  ansible.builtin.include_tasks: 
+    file: exec_vmware_snapshot.yml
+
+- name: Liverpool | T2 | Ejecutar checklist previo a parchado
+  ansible.builtin.include_tasks: 
+    file: exec_checklist_prepatch.yml
+  
+- name: Liverpool | T3 | Ejecutar checklist previo a parchado
+  ansible.builtin.include_tasks: 
+    file: exec_patching.yml
+
+- name: Liverpool | T4 | Ejecutar checklist posterior a parchado
+  ansible.builtin.include_tasks: 
+    file: exec_checklist_postpatch.yml
+

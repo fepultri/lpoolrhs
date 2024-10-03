@@ -1,0 +1,52 @@
+- name: Detencion de servicios
+  when: list_services is defined 
+  block:
+  
+    - name: Crear listado de servicios  
+      ansible.builtin.set_fact:
+        def_lista_servicios: "{{ list_services.split(',') }}"
+
+    - name: Detencion de servicios 
+      ansible.builtin.service: 
+        name: "{{ item }}"
+        state: stopped
+      loop: "{{ def_lista_servicios }}"
+      ignore_errors: true
+
+- name: Detencion antivirus.
+  ansible.builtin.shell: |
+    {{ item.command }}
+  args:
+    chdir: "{{ item.dir }}"
+  loop: "{{ antivirus_commands }}"
+  register: result_stop_av    
+  changed_when: false
+  failed_when: false
+  become: true
+    
+  
+- name: T1 - Ejecutar update de maquinas RHEL 
+#  when: ansible_distribution_major_version| int == 7
+  block:
+    - name: Listar actualizaciones
+      ansible.builtin.yum:
+        list: '*'
+      register: result_package_list
+   
+    - name: Ejecutar actualizaciones
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+        exclude: "{{ update_exclussion | default(omit) }}"
+        update_cache: true
+      environment:
+        http_proxy: ""
+        https_proxy: ""
+      register: result_package_update
+
+ 
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 3600
+      when: result_package_update.changed
+
