@@ -2,9 +2,9 @@
   hosts: localhost
   gather_facts: no
   vars:
-    vcenter_host: 'mtyvcapac01.vmware.liverpool.com.mx'
-    vcenter_user: 'automation@vmware.liverpool.com.mx'
-    vcenter_password: 'An5!bl3_au70m4t!0n'
+    vcenter_host: 'qrovcapac01.vmware.liverpool.com.mx'
+    vcenter_user: 'ansible@vmware.liverpool.com.mx'
+    vcenter_password: 'L!v3rp00l'
     validate_certs: False  # Cambia a True si usas certificados válidos
 
   tasks:
