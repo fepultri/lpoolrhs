@@ -1,0 +1,93 @@
+---
+- name: "Liverpool - Inicializar parchado de servidores RHEL"
+  hosts: all
+  gather_facts: no
+  order: sorted
+  
+  vars_files:
+    - vars/main.yml
+  
+  vars: 
+    fecha_ejecucion: "{{ ansible_date_time.date }}_{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}"
+
+  pre_tasks:
+  
+  - name: "Liverpool | Reporte |  Crear directorio de salida"
+    run_once: yes
+    delegate_to: localhost
+    ansible.builtin.file:
+      path: "{{ playbook_dir }}/informe_update"
+      state: directory
+  
+  # We set hosts as failed/missing until proven otherwise. See README.md
+  - name: "Liverpool | Reporte Extra | Set initial job status to catch missing/failed hosts"
+    ansible.builtin.set_fact:
+      job_success: False
+      missing: True
+
+  - name: "Liverpool | Reporte Extra | Gather server facts and weed out unavailable hosts"
+    ansible.builtin.setup:
+
+  - name: "Liverpool | Reporte Extra | Set remaining hosts as not missing"
+    ansible.builtin.set_fact:
+      missing: False
+
+  tasks:
+
+  - name: Ejecucion de parchado de {{ inventory_hostname }}
+    ansible.builtin.include_role:
+      name: rhel_patching
+
+  post_tasks:
+
+  - name: "Liverpool | Reporte Extra | Mark surviving hosts as successful"
+    ansible.builtin.set_fact:
+      job_success: True
+
+  # Saving curated lists of hosts as localhost facts, to make the Jinja loops easier to read in the template.
+  # To use: hostvars['localhost']['success_list'] , etc
+  - name: "Liverpool | Reporte Extra | Save summary facts under Ansible controller"
+    ansible.builtin.set_fact:
+      date_str: "{{ date }}_{{ hms }}"
+      date_str_pretty: "{{ date }} {{ hms_pretty }}"
+      kernels_list: '{{ hostvars | json_query(kernel_query) | unique | sort }}'
+      success_list: '{{ hostvars | dict2items | json_query(success_query) }}'
+      failed_list: '{{ hostvars | dict2items | json_query(failed_query) }}'
+      missing_list: '{{ hostvars | dict2items | json_query(missing_query) }}'
+    vars:
+      kernel_query: "*.ansible_kernel"
+      success_query: "[?value.job_success==`true`].key"
+      failed_query: "[?value.job_success==`false` && value.missing==`false`].key"
+      missing_query: "[?value.missing==`true`].key"
+      date: "{{ '%Y-%m-%d' | strftime }}"
+      hms_pretty: "{{ '%H:%M:%S' | strftime }}"
+      hms: "{{ hms_pretty | replace(':','-') }}"
+    delegate_to: localhost
+    delegate_facts: true
+    run_once: true
+
+  - name: "Liverpool | Remediación RHEL | Declaracion de variable result_package_update para cuando no hay updates"
+    ansible.builtin.set_fact:
+      registro_actualizacion: {'msg':"No se encontraron actualizaciones disponibles. No se generaron respaldos. El equipo se encuentra al día.", 'rc':0}
+    when: not result_package_update.changed
+
+  - name: "Liverpool | Reporte Extra | Save job report to {{ playbook_dir }}"
+    delegate_to: localhost
+    delegate_facts: True
+    run_once: yes
+    ansible.builtin.template:
+      src: job_report_master.j2
+      dest: "{{ playbook_dir }}/informe_update/job_report_{{ hostvars['localhost']['date_str'] }}.html"
+
+  - name: "Liverpool | Reporte | Envio de informe desde AAP"
+    ansible.builtin.import_role:
+      name: roles/sendmail
+    vars:
+      email_subject: "Liverpool - Job ID  {{ tower_job_id }} - Actualizacion RHEL"
+      notification_type: "Success"
+      attachment: "{{ playbook_dir }}/informe_update/job_report_{{ hostvars['localhost']['date_str'] }}.html"
+      email_message: |
+        Resumen de ejecución : 
+        Vea el archivo HTML adjunto para mas detalles
+        Para consultar la salida completa  de la ejecución visite {{ job_url }}
+
