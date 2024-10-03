@@ -4,7 +4,7 @@
         make_snapshot: "{{ true | default(false) }}"
       when: snapshot_required == 'Si'
       
-    - name: "iLiverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
+    - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
       when: make_snapshot|bool
       block:  
 
