@@ -13,16 +13,16 @@
       loop: "{{ def_lista_servicios }}"
       ignore_errors: true
 
-- name: Detencion antivirus.
-  ansible.builtin.shell: |
-    {{ item.command }}
-  args:
-    chdir: "{{ item.dir }}"
-  loop: "{{ antivirus_commands }}"
-  register: result_stop_av    
-  changed_when: false
-  failed_when: false
-  become: true
+#- name: Detencion antivirus.
+#  ansible.builtin.shell: |
+#    {{ item.command }}
+#  args:
+#    chdir: "{{ item.dir }}"
+#  loop: "{{ antivirus_commands }}"
+#  register: result_stop_av    
+#  changed_when: false
+#  failed_when: false
+#  become: true
     
   
 - name: T1 - Ejecutar update de maquinas RHEL 

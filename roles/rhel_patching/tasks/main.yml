@@ -8,7 +8,7 @@
   ansible.builtin.include_tasks: 
     file: exec_checklist_prepatch.yml
   
-- name: Liverpool | T3 | Ejecutar checklist previo a parchado
+- name: Liverpool | T3 | Ejecutar parchado
   ansible.builtin.include_tasks: 
     file: exec_patching.yml
 
