@@ -16,11 +16,11 @@ patching_commands:
 - {title: "Estado filesystems", command: "cat /etc/fstab "}
 
 
-antivirus_commands:
-- { dir: "/opt/isec/ens/threatprevention/bin/" , command: "./isectpdControl.sh stop" }
-- { dir: "/opt/isec/ens/esp/bin/", command: "./isecespdControl.sh stop" }
-- { dir: "/opt/McAfee/ens/tp/init/", command: "./mfetpd-control.sh stop" }
-- { dir: "/opt/McAfee/ens/esp/init/", command: "./mfeespd-control.sh stop" }
-- { dir: "/opt/McAfee/agent/bin/", command: "./macmnsvc stop" }
-- { dir: "/opt/McAfee/agent/bin/", command: "./macompatsvc stop" }
-- { dir: "/opt/McAfee/agent/bin/", command: "./masvc stop" }
+#antivirus_commands:
+#- { dir: "/opt/isec/ens/threatprevention/bin/" , command: "./isectpdControl.sh stop" }
+#- { dir: "/opt/isec/ens/esp/bin/", command: "./isecespdControl.sh stop" }
+#- { dir: "/opt/McAfee/ens/tp/init/", command: "./mfetpd-control.sh stop" }
+#- { dir: "/opt/McAfee/ens/esp/init/", command: "./mfeespd-control.sh stop" }
+#- { dir: "/opt/McAfee/agent/bin/", command: "./macmnsvc stop" }
+#- { dir: "/opt/McAfee/agent/bin/", command: "./macompatsvc stop" }
+#- { dir: "/opt/McAfee/agent/bin/", command: "./masvc stop" }
