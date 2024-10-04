@@ -1,11 +1,11 @@
 ---
-- name: Obtener información de máquinas virtuales de VMware
+- name:  info VMware
   hosts: localhost
   gather_facts: no
   vars:
-    vcenter_host: 'mtyvcapac01.vmware.liverpool.com.mx'
-    vcenter_user: 'ansible@vmware.liverpool.com.mx'
-    vcenter_password: 'L!v3rp00l'
+    vcenter_host: '{{ lookup("env", "VMWARE_HOST") }}'
+    vcenter_user: '{{ lookup("env", "VMWARE_USER") }}' 
+    vcenter_password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
     validate_certs: False  # Cambia a True si usas certificados válidos
 
   tasks:
