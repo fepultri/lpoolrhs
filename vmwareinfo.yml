@@ -1,12 +1,12 @@
- ---
- - name: info VMware
-   hosts: localhost
-   gather_facts: no
-   vars:
-     vcenter_host: 'mtyvcapac01.vmware.liverpool.com.mx'
-     vcenter_user: 'ansible@vmware.liverpool.com.mx'
-     vcenter_password: 'L!v3rp00l'
-     validate_certs: False  # Cambia a True si usas certificados válidos
+---
+- name: Obtener información de máquinas virtuales de VMware
+  hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_host: 'mtyvcapac01.vmware.liverpool.com.mx'
+    vcenter_user: 'ansible@vmware.liverpool.com.mx'
+    vcenter_password: 'L!v3rp00l'
+    validate_certs: False  # Cambia a True si usas certificados válidos
 
   tasks:
     - name: Conectar a vCenter y obtener información de las VMs
