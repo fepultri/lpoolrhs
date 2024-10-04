@@ -1,6 +1,6 @@
 ---
 - name: Obtener información de máquinas virtuales de VMware
-  hosts: all
+  hosts: localhost
   gather_facts: no
   vars:
     vcenter_host: 'mtyvcapac01.vmware.liverpool.com.mx'
