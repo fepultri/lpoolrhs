@@ -1,5 +1,5 @@
 #out_dir: "{{ playbook_dir }}/informe_update"
-job_url: "https://ansible.liverpool.com.mx/#/jobs/playbook/{{ tower_job_id }}/output""
+job_url: "https://ansible.liverpool.com.mx/#/jobs/playbook/{{ tower_job_id }}/output"
 nav_width: 200px
 failed_style: 'color:orangered'
 missing_style: 'color:grey;text-decoration:line-through'
