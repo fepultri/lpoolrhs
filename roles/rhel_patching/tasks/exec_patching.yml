@@ -1,3 +1,9 @@
+- name: Pausa de la actualizacion 
+  ansible.builtin.pause:
+    minutes: "{{ time_to_pause|int }}"
+  when: time_to_pause is defined 
+
+
 - name: Detencion de servicios
   when: list_services is defined 
   block:
@@ -49,4 +55,3 @@
       ansible.builtin.reboot:
         reboot_timeout: 3600
       when: result_package_update.changed
-
