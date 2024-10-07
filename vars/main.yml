@@ -1,0 +1,39 @@
+#out_dir: "{{ playbook_dir }}/informe_update"
+job_url: "https://ansible.liverpool.com.mx/#/jobs/playbook/{{ tower_job_id }}/output""
+nav_width: 200px
+failed_style: 'color:orangered'
+missing_style: 'color:grey;text-decoration:line-through'
+fecha_ejecucion: "{{ ansible_date_time.date }}_{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}"
+
+
+
+
+- name: Ejecutar comando {{ exec_command }}
+  ansible.builtin.shell: >- 
+     {{ exec_command ) }}
+  args:
+    executable: /bin/bash
+  register: result_command_output
+  changed_when: false
+  until: result_command_output.rc == 0
+  retries: 3
+  delay: 3
+  
+
+- name: Añadir resultado de comando a archivo {{ command_output_file }}
+  ansible.builtin.lineinfile:
+    path: "{{ command_output_file }}"
+    insertafter: EOF
+    line: |
+      =========={{ command_title }}==========
+      {% if result_command_output.rc == 0 %}
+       {% for result in result_command_output.stdout_lines %}
+         {{ result }}
+       {% endfor %}
+      {% else %}
+       Error en salida de datos
+      {% endif%}
+ register: result_write_result
+ until:  result_write_result.msg.find("line added") != -1
+ retries: 3
+ delay: 5
