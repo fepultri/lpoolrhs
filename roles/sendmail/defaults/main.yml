@@ -1,0 +1,16 @@
+# defaults/main.yml
+
+# Servidor SMTP
+smtp_host: '172.17.202.106'
+smtp_port: 25
+smtp_user: 'ansible@liverpool.com.mx'
+#smtp_password: 'contraseña'
+
+# Configuración del correo
+email_from: 'ansible@liverpool.com.mx'
+email_to: 'fpulido@redhat.com'
+email_subject: 'Notificación Ansible'
+email_body: 'Esta es una notificación automática de Ansible.'
+
+# Opción para habilitar o deshabilitar el envío de correos
+enable_email_notification: true
