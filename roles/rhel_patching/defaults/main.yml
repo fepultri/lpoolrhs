@@ -1,6 +1,6 @@
 ruta_log_pre_patch: "{{ ruta_base }}/prepatch/log.txt"
 ruta_log_pos_patch: "{{ ruta_base }}/postpatch/log.txt"
-ruta_base: "/var/log/ansible-remediacion/{{ inventory_hostname }}_{{ fecha_ejecucion }}"
+ruta_base: "/tmp/ansible-remediacion/{{ inventory_hostname }}_{{ fecha_ejecucion }}"
  
  
  
