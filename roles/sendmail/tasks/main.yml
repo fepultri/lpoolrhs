@@ -10,12 +10,12 @@
   become_user: root
   failed_when: false
   community.general.mail:
-    host: "{{ SMTP_SERVER }}"
-    port: "{{ SMTP_PORT }}"
-    username: "{{ email_username | default(omit) }}"
-    password: "{{ email_passwd | default(omit) }}"
-    from: "{{ MAIL_FROM | default(mail_from)  }}"
-    to: "{{ mail_to | default('ansible@liverpool.com.mx') }}"
+    host: "{{ smtp_host }}"
+    port: "{{ smtp_port }}"
+    username: "{{ smtp_user }}"
+   # password: "{{ email_passwd | default(omit) }}"
+    from: "{{ email_from }}"
+    to: "{{ email_to }}"
     subject: "{{ email_subject }}"
     subtype: html
     secure: try
@@ -42,12 +42,12 @@
   become_user: root
   failed_when: false
   community.general.mail:
-    host: "{{ SMTP_SERVER }}"
-    port: "{{ SMTP_PORT }}"
-    username: "{{ email_username | default(omit) }}"
-    password: "{{ email_passwd | default(omit) }}"
-    from: "{{ MAIL_FROM | default(mail_from)  }}"
-    to: "{{ mail_to | default('xxx@liverpool.com.mx') }}"
+    host: "{{ smtp_host }}"
+    port: "{{ smtp_port }}"
+    username: "{{ smtp_user }}"
+    #password: "{{ email_passwd | default(omit) }}"
+    from: "{{ email_from }}"
+    to: "{{ email_to }}"
     subject: "{{ email_subject }}"
     subtype: html
     secure: try
