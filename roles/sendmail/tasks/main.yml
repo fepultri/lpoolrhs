@@ -15,7 +15,7 @@
     username: "{{ email_username | default(omit) }}"
     password: "{{ email_passwd | default(omit) }}"
     from: "{{ MAIL_FROM | default(mail_from)  }}"
-    to: "{{ mail_to | default('xxx@liverpool.com.mx') }}"
+    to: "{{ mail_to | default('ansible@liverpool.com.mx') }}"
     subject: "{{ email_subject }}"
     subtype: html
     secure: try

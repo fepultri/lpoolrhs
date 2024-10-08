@@ -1,3 +1,3 @@
 ---
 # vars file for sendmail
-mail_from: xx@liverpool.com.mx
+mail_from: ansible@liverpool.com.mx
