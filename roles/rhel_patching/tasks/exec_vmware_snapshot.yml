@@ -2,7 +2,7 @@
     - name: Definir la creacion de snapshot 
       ansible.builtin.set_fact:
         make_snapshot: "{{ true | default(false) }}"
-      when: snapshot_required == 'Si'
+      when: make_snapshot == 'Si'
       
     - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
       when: make_snapshot|bool
