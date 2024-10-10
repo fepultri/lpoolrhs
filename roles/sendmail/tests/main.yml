@@ -1,5 +1,12 @@
 ---
-- hosts: localhost
-  remote_user: root
+- hosts: all
   roles:
-    - sendmail
+    - role: sendmail
+      vars:
+        smtp_host: ''
+        smtp_user: 'notificaciones@miempresa.com'
+        smtp_password: 'password_secreta'
+        email_to: 'equipo@miempresa.com'
+        email_subject: 'Reporte de Ejecución Ansible'
+        email_body: 'El playbook se ejecutó correctamente.'
+        enable_email_notification: true
