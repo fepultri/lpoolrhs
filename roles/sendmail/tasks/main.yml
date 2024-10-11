@@ -1,18 +1,65 @@
-# tasks/main.yml
+---
+# tasks file for sendmail
 
-- name: Verificar si el envío de notificaciones está habilitado
-  debug:
-    msg: "El envío de notificaciones está deshabilitado."
-  when: not enable_email_notification
-
-- name: Enviar notificación por correo
-  mail:
+- name: "Enviar notificacion - Ejecucion exitosa"
+  when: notification_type == "Success"
+  connection: local
+  delegate_to: localhost
+  become: true
+  become_method: sudo
+  become_user: root
+  failed_when: false
+  community.general.mail:
     host: "{{ smtp_host }}"
     port: "{{ smtp_port }}"
     username: "{{ smtp_user }}"
     password: "{{ smtp_password }}"
+    from: "{{ mail_from }}"
     to: "{{ email_to }}"
-    from: "{{ email_from }}"
     subject: "{{ email_subject }}"
-    body: "{{ email_body }}"
-  when: enable_email_notification
+    subtype: html
+    secure: try
+    body: |
+      <html>
+      <body>
+      <p>Resumen de ejecución del <strong>Job ID {{ tower_job_id }}</strong> </p>
+      <p style="color:green;"><strong>Ejecucion exitosa</strong><br><br></p>
+      <p style="color:green;">
+        {{ email_message | default('Ejecucion exitosa') }}
+      </p>
+      </body>
+      </html>
+    attach: 
+      - "{{ attachment | default(omit) }}"
+  
+
+- name: "Enviar notificacion - Ejecucion fallida"
+  when: notification_type == "Error"
+  connection: local
+  delegate_to: localhost
+  become: true
+  become_method: sudo
+  become_user: root
+  failed_when: false
+  community.general.mail:
+    host: "{{ smtp_host }}"
+    port: "{{ smtp_port }}"
+    username: "{{ smtp_host }}"
+    password: "{{ smtp_password }}"
+    from: "{{ mail_from }}"
+    to: "{{ email_to }}"
+    subject: "{{ email_subject }}"
+    subtype: html
+    secure: try
+    body: |
+      <html>
+      <body>
+      <p>Resumen de ejecución del <strong>Job ID {{ tower_job_id }}</strong> </p>
+      <p style="color:red;"><strong>Ejecucion Fallida</strong><br><br></p>
+      <p style="color:red;">
+      {{ email_message |  default('Ejecucion fallida') }}
+      </p>
+      </body>
+      </html>
+    attach: 
+      - "{{ attachment | default(omit) }}"
