@@ -6,7 +6,7 @@
 
     
     - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
-      when: make_snapshot|bool"
+      when: make_snapshot == Si"
       block:  
 
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
@@ -45,7 +45,12 @@
           delegate_to: localhost
           register: result_vmware_snapshot
 
-    
+    - name: Mensaje cuando no se toma snapshot
+      debug:
+        msg: "No se tomó snapshot, ya que el usuario seleccionó 'No'."
+      when: snapshot_decision == "No"
+
+
       rescue:
       - name: Mensaje
         ansible.builtin.debug:
