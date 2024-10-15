@@ -1,7 +1,7 @@
  ### Obtención de información de máquina virtual de VMware ###
     - name: Verificar si se debe tomar el snapshot
       debug:
-        msg: "Se va a tomar un snapshot para la VM {{ vm_name }}"
+        msg: "Se va a tomar un snapshot para la VM"
       when: make_snapshot == "Si"
 
     
