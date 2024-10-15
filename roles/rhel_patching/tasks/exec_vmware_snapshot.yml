@@ -45,11 +45,11 @@
           delegate_to: localhost
           register: result_vmware_snapshot
 
-    - name: Mensaje cuando no se toma snapshot
+   - name: Mensaje cuando no se toma snapshot
       debug:
         msg: "No se tomó snapshot, ya que el usuario seleccionó 'No'."
       when: make_snapshot == "No"
-
+ 
 
       rescue:
       - name: Mensaje
