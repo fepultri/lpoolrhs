@@ -48,7 +48,7 @@
     - name: Mensaje cuando no se toma snapshot
       debug:
         msg: "No se tomó snapshot, ya que el usuario seleccionó 'No'."
-      when: snapshot_decision == "No"
+      when: make_snapshot == "No"
 
 
       rescue:
