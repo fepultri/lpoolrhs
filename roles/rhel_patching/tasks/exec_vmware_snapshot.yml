@@ -1,7 +1,7 @@
  ### Obtención de información de máquina virtual de VMware ###
     - name: Definir la creacion de snapshot 
       ansible.builtin.set_fact:
-        make_snapshot: "{{ (snapshot_required == 'Si') | ternary()true,false }}"
+        make_snapshot: "{{ (snapshot_required == 'Si') | default('Si') }}"
       
     - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
       when: make_snapshot|bool
