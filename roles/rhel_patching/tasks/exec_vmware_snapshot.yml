@@ -6,7 +6,7 @@
 
     
     - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
-      when: make_snapshot == Si"
+      when: make_snapshot == "Si"
       block:  
 
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
