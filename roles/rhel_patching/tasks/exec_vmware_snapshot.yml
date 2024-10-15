@@ -45,7 +45,7 @@
           delegate_to: localhost
           register: result_vmware_snapshot
 
-        rescue:
+      rescue:
       - name: Mensaje
         ansible.builtin.debug:
           msg: "Ooops algo paso"
