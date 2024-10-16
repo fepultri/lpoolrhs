@@ -20,8 +20,9 @@
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquina virtual con IP  en VMWare"
           ansible.builtin.set_fact:
             vmware_vm_info: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='guest_name')| list  }}"
-            vm_moid: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='moid')| list  }}"
-            
+            #vm_moid: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='moid')| list  }}"
+            vm_folder: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='folder')| list  }}"
+
        # - name: "Liverpool | Actualización RHEL | Formateo de variable "
        #   ansible.builtin.set_fact:
        #     vm_info: "{{ vmware_vm_info[0] | trim }}"
