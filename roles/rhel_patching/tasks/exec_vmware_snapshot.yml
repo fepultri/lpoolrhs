@@ -1,7 +1,4 @@
----
 - name: Tomar snapshot de VM 
-  hosts: localhost
-  gather_facts: false
   vars:
     vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
     vcenter_username: "automation@vmware.liverpool.com.mx"
