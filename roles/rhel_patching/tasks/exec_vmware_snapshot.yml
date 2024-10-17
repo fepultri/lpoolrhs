@@ -1,11 +1,10 @@
----
 - name: Tomar snapshot de VM 
-  vars:
-    vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
-    vcenter_username: "automation@vmware.liverpool.com.mx"
-    vcenter_password: "An5¡bl3_au70m4t¡0n"
-    vm_name: "mtyplantso7"
-    validate_certs: false
+    vars:
+      vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
+      vcenter_username: "automation@vmware.liverpool.com.mx"
+      vcenter_password: "An5¡bl3_au70m4t¡0n"
+      vm_name: "mtyplantso7"
+      validate_certs: false
 
   tasks:
     - name: Verificar si se debe tomar el snapshot
