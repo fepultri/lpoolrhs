@@ -1,35 +1,54 @@
-- name: Tomar snapshot de VM 
-    vars:
-      vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
-      vcenter_username: "automation@vmware.liverpool.com.mx"
-      vcenter_password: "An5¡bl3_au70m4t¡0n"
-      vm_name: "mtyplantso7"
-      validate_certs: false
-
-  tasks:
+ ### Obtención de información de máquina virtual de VMware ###
+    
     - name: Verificar si se debe tomar el snapshot
       debug:
-        msg: "Se va a tomar un snapshot para la VM {{ vm_name }}"
+        msg: "Se va a tomar un snapshot para la VM"
       when: make_snapshot == "Si"
 
-    - name: Crear snapshot de la máquina virtual en VMware (si es requerido)
-      vmware_guest_snapshot:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: "{{ validate_certs }}"
-        datacenter: "{{ datacenter | default('Datacenter') }}"
-        folder: "{{ folder | default('/') }}"
-        name: "{{ vm_name }}"
-        state: present
-        snapshot_name: "Snapshot_Automatico_{{ ansible_date_time.date }}"
-        description: "Snapshot creado por AAP"
-        memory: false
-        quiesce: false
-      delegate_to: localhost
+    
+    - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
       when: make_snapshot == "Si"
+      block:  
 
-    - name: Mensaje cuando no se toma snapshot
-      debug:
-        msg: "No se tomó snapshot, ya que el usuario seleccionó 'No'."
-      when: make_snapshot == "No"
+        - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
+          community.vmware.vmware_vm_info:
+            hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+            username: '{{ lookup("env", "VMWARE_USER") }}'
+            password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+          delegate_to: localhost
+          register: result_vmware_info
+          
+        - name: "Liverpool | Actualización RHEL | Obtener informacion de maquina virtual con IP  en VMWare"
+          ansible.builtin.set_fact:
+            vmware_vm_info: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='guest_name')| list  }}"
+            #vm_moid: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='moid')| list  }}"
+            vm_folder: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='folder')| list  }}"
+
+       # - name: "Liverpool | Actualización RHEL | Formateo de variable "
+       #   ansible.builtin.set_fact:
+       #     vm_info: "{{ vmware_vm_info[0] | trim }}"
+
+       # - name: "Liverpool | Actualización RHEL | Generar nombre de snapshot"
+       #   ansible.builtin.set_fact: 
+       #     snapshot_name: "{{ vmware_vm_info[0] }}"
+        
+       # - name: "Liverpool | Actualización RHEL | Generar snapshot"
+       #   community.vmware.vmware_guest_snapshot:
+       #     hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+       #     username: '{{ lookup("env", "VMWARE_USER") }}'
+       #     password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+       #     datacenter: "{{ result_vmware_info.virtual_machines.0.datacenter }}"
+       #     folder: "{{ result_vmware_info.virtual_machines.0.folder }}"
+       #     moid: "{{ vm_moid[0] }}"
+       #     name: "{{ vm_info | lower }}"
+       #     state: present
+       #     snapshot_name: "{{ snapshot_name }}"
+       #     validate_certs: no
+       #   delegate_to: localhost
+       #   register: result_vmware_snapshot
+
+      rescue:
+      - name: Mensaje
+        ansible.builtin.debug:
+          msg: "Ooops algo paso"
+
