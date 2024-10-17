@@ -14,7 +14,8 @@
           community.vmware.vmware_vm_info:
             hostname: '{{ lookup("env", "VMWARE_HOST") }}'
             username: '{{ lookup("env", "VMWARE_USER") }}'
-            password: 'An5¡bl3_au70m4t¡0n'
+            password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+            validate_certs: no
           delegate_to: localhost
           register: result_vmware_info
           
