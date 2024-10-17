@@ -1,3 +1,4 @@
+---
 - name: Tomar snapshot de VM 
   vars:
     vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
