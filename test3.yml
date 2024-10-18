@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
-    telnet_port: 443
+    telnet_port: 80
 
   tasks:
     - name: Hacer ping al vCenter
