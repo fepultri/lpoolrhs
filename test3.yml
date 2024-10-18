@@ -1,0 +1,42 @@
+---
+- name: Testear conectividad al vCenter mediante ping y telnet
+  hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
+    telnet_port: 443
+
+  tasks:
+    - name: Hacer ping al vCenter
+      ansible.builtin.command:
+        cmd: "ping -c 4 {{ vcenter_hostname }}"
+      register: ping_result
+      ignore_errors: yes
+
+    - name: Mostrar resultado del ping
+      debug:
+        var: ping_result.stdout
+
+    - name: Verificar si el ping fue exitoso
+      assert:
+        that:
+          - "'0% packet loss' in ping_result.stdout"
+        fail_msg: "El ping al vCenter ha fallado."
+        success_msg: "Ping al vCenter exitoso."
+
+    - name: Probar telnet al vCenter en el puerto 443
+      ansible.builtin.shell:
+        cmd: "timeout 5 telnet {{ vcenter_hostname }} {{ telnet_port }}"
+      register: telnet_result
+      ignore_errors: yes
+
+    - name: Mostrar resultado del telnet
+      debug:
+        var: telnet_result.stdout
+
+    - name: Verificar si el telnet fue exitoso
+      assert:
+        that:
+          - "'Connected' in telnet_result.stdout or 'Escape character' in telnet_result.stdout"
+        fail_msg: "Telnet al vCenter en el puerto {{ telnet_port }} ha fallado."
+        success_msg: "Telnet al vCenter en el puerto {{ telnet_port }} fue exitoso."
