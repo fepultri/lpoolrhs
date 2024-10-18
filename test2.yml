@@ -1,0 +1,33 @@
+---
+- name: Testear conexión a vCenter
+  hosts: localhost
+  gather_facts: no
+  collections:
+    - community.vmware
+
+  vars:
+    vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
+    vcenter_username: "automation@vmware.liverpool.com.mx"
+    vcenter_password: "An5¡bl3_au70m4t¡0n"
+    validate_certs: false  # Cambia a 'true' si tienes un certificado válido
+
+  tasks:
+    - name: Comprobar la conexión al vCenter
+      vmware_host_facts:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: "{{ validate_certs }}"
+      register: host_facts
+
+    - name: Mostrar los hosts conectados al vCenter
+      debug:
+        msg: "Los hosts conectados son: {{ host_facts['hosts'] }}"
+
+    - name: Verificar si se conectó correctamente
+      assert:
+        that:
+          - host_facts is defined
+          - host_facts['hosts'] | length > 0
+        fail_msg: "No se pudo conectar al vCenter o no hay hosts disponibles."
+        success_msg: "Conexión exitosa al vCenter."
