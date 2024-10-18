@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     vcenter_hostname: "mtyvcapac01.vmware.liverpool.com.mx"
-    telnet_port: 80
+    telnet_port: 443
 
   tasks:
     - name: Hacer ping al vCenter
@@ -26,7 +26,7 @@
 
     - name: Probar telnet al vCenter en el puerto 443
       ansible.builtin.shell:
-        cmd: "timeout 5 telnet {{ vcenter_hostname }} {{ telnet_port }}"
+        cmd: "curl -v telnet://{{ vcenter_hostname }}:{{ telnet_port }}"
       register: telnet_result
       ignore_errors: yes
 
