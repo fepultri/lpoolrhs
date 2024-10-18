@@ -26,7 +26,7 @@
 
     - name: Probar telnet al vCenter en el puerto 443
       ansible.builtin.shell:
-        cmd: "nc -vz {{ vcenter_hostname }} {{ telnet_port }}"
+        cmd: "curl -kv telnet://{{ vcenter_hostname }}:{{ telnet_port }}"
       register: telnet_result
       ignore_errors: yes
 
