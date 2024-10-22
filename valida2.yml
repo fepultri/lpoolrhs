@@ -1,0 +1,41 @@
+---
+- name: Interactuar con la API REST de VMware vSphere usando Ansible
+  hosts: localhost
+  gather_facts: no
+  vars:
+    #vcenter_host: "mtyvcapac01.vmware.liverpool.com.mx"
+    #vcenter_username: "automation@vmware.liverpool.com.mx"
+    #vcenter_password: "An5¡bl3_au70m4t¡0n"
+    vcenter_host: '{{ lookup("env", "VMWARE_HOST") }}'
+    vcenter_username: '{{ lookup("env", "VMWARE_USER") }}' 
+    vcenter_password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+    #validate_certs: False  # Cambia a True si usas certificados válidos
+  tasks:
+    - name: Autenticarse en vCenter y obtener un token de sesión
+      uri:
+        url: "https://{{ vcenter_host }}/rest/com/vmware/cis/session"
+        method: POST
+        user: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        force_basic_auth: yes
+        validate_certs: no
+        headers:
+          Content-Type: "application/json"
+      register: login_response
+
+    - name: Mostrar la respuesta de autenticación
+      debug:
+        msg: "Autenticación exitosa, Token de sesión: {{ login_response.json.value }}"
+
+    - name: Obtener la lista de máquinas virtuales
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/vm"
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ login_response.json.value }}"
+        validate_certs: no
+      register: vm_list_response
+
+    - name: Mostrar la lista de máquinas virtuales
+      debug:
+        var: vm_list_response.json
