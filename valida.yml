@@ -1,0 +1,14 @@
+---
+- name: Validar las colecciones instaladas en el entorno de ejecución
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Ejecutar el comando para listar las colecciones de Ansible
+      ansible.builtin.command: 
+        cmd: "ansible-galaxy collection list"
+      register: collections_list
+
+    - name: Mostrar las colecciones instaladas
+      ansible.builtin.debug:
+        msg: "{{ collections_list.stdout }}"
