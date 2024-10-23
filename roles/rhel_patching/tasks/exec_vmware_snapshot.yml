@@ -10,19 +10,19 @@
       when: make_snapshot == "Si"
       block:
 
-        - name: Mensaje
-          debug:
-            msg: |
-                  '{{ lookup("env", "VMWARE_HOST") }}'
-                  '{{ lookup("env", "VMWARE_USER") }}'
-                  '{{ lookup("env", "VMWARE_PASSWORD") }}'
-        - meta: end_host
+       # - name: Mensaje
+        #  debug:
+         #   msg: |
+         #         '{{ lookup("env", "VMWARE_HOST") }}'
+         #         '{{ lookup("env", "VMWARE_USER") }}'
+         #         '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        #- meta: end_host
 
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
           community.vmware.vmware_vm_info:
             hostname: '{{ lookup("env", "VMWARE_HOST") }}'
             username: '{{ lookup("env", "VMWARE_USER") }}'
-            password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+            password: 'An5¡bl3_au70m4t¡0n'
             validate_certs: no
           delegate_to: localhost
           register: result_vmware_info
