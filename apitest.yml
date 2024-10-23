@@ -45,11 +45,13 @@
         headers:
           vmware-api-session-id: "{{ login_response.json.value }}"
         validate_certs: "{{ validate_certs }}"
-      loop: "{{ vm_list_response.json }}"
+      loop: "{{ vm_list_response.json.value }}"
+      loop_control:
+        label: "{{ item.name }}"
       register: vm_ip_response
 
     - name: Mostrar la dirección IP de cada máquina virtual
       debug:
-        msg: "VM {{ item.vm }} tiene la IP: {{ item.json.value[0].ip_addresses[0] }}"
+        msg: "VM {{ item.item.name }} tiene la IP: {{ item.json.value[0].ip_addresses[0] }}"
       loop: "{{ vm_ip_response.results }}"
       when: item.json.value is defined and item.json.value | length > 0
