@@ -1,0 +1,66 @@
+---
+- name: Tomar snapshots 
+  hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_host: "mtyvcapac01.vmware.liverpool.com.mx"
+    vcenter_username: "automation@vmware.liverpool.com.mx"
+    vcenter_password: "An5¡bl3_au70m4t¡0n"
+
+    # Estas variables serán llenadas por el survey en Ansible Tower/Controller
+    snapshot_vm1: "{{ snapshot_vm1 }}"
+    #snapshot_vm2: "{{ snapshot_vm2 }}"
+    #snapshot_vm3: "{{ snapshot_vm3 }}"
+    
+  tasks:
+    - name: Autenticarse en vCenter y obtener token de sesión
+      uri:
+        url: "https://{{ vcenter_host }}/rest/com/vmware/cis/session"
+        method: POST
+        user: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Content-Type: "application/json"
+      register: login_response
+
+    - name: Verificar autenticación
+      debug:
+        msg: "Token de sesión obtenido: {{ login_response.json.value }}"
+
+    - name: Obtener lista de máquinas virtuales
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/vm"
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ login_response.json.value }}"
+        validate_certs: "{{ validate_certs }}"
+      register: vm_list_response
+
+    - name: Mostrar la lista de máquinas virtuales
+      debug:
+        var: vm_list_response.json
+
+    - name: Crear snapshot para VM1 si la encuesta lo solicita
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/vm/{{ vm_list_response.json[0].vm }}/snapshot"
+        method: POST
+        headers:
+          vmware-api-session-id: "{{ login_response.json.value }}"
+        validate_certs: "{{ validate_certs }}"
+        body_format: json
+        body:
+          spec:
+            description: "Snapshot para VM1"
+            memory: true
+            quiesce: false
+        when: snapshot_vm1 == "Sí"
+      register: snapshot_vm1_response
+ 
+    - name: Mostrar resultados del snapshot de VM1
+      debug:
+        var: snapshot_vm1_response
+      when: snapshot_vm1 == "Sí"
+
+   

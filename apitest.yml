@@ -33,6 +33,25 @@
         validate_certs: no
       register: vm_list_response
 
+    
     - name: Mostrar la lista de máquinas virtuales
       debug:
         var: vm_list_response.json
+
+    - name: Obtener la dirección IP de cada máquina virtual
+      uri:
+        url: "https://{{ vcenter_host }}/rest/vcenter/vm/{{ item.vm }}/guest/networking"
+        method: GET
+        headers:
+          vmware-api-session-id: "{{ login_response.json.value }}"
+        validate_certs: "{{ validate_certs }}"
+      loop: "{{ vm_list_response.json }}"
+      register: vm_ip_response
+
+    - name: Mostrar la dirección IP de cada máquina virtual
+      debug:
+        msg: "VM {{ item.vm }} tiene la IP: {{ item.json.value[0].ip_addresses[0] }}"
+      loop: "{{ vm_ip_response.results }}"
+      when: item.json.value is defined and item.json.value | length > 0
+
+
