@@ -1,11 +1,12 @@
 ---
-- name: Interactuar con la API REST de VMware vSphere usando Ansible
+- name: Obtener la dirección IP de las máquinas virtuales desde VMware usando la API REST
   hosts: localhost
   gather_facts: no
   vars:
     vcenter_host: "mtyvcapac01.vmware.liverpool.com.mx"
     vcenter_username: "automation@vmware.liverpool.com.mx"
     vcenter_password: "An5¡bl3_au70m4t¡0n"
+    validate_certs: no
 
   tasks:
     - name: Autenticarse en vCenter y obtener un token de sesión
@@ -15,14 +16,14 @@
         user: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         force_basic_auth: yes
-        validate_certs: no
+        validate_certs: "{{ validate_certs }}"
         headers:
           Content-Type: "application/json"
       register: login_response
 
-    - name: Mostrar la respuesta de autenticación
+    - name: Verificar autenticación
       debug:
-        msg: "Autenticación exitosa, Token de sesión: {{ login_response.json.value }}"
+        msg: "Token de sesión obtenido: {{ login_response.json.value }}"
 
     - name: Obtener la lista de máquinas virtuales
       uri:
@@ -30,10 +31,9 @@
         method: GET
         headers:
           vmware-api-session-id: "{{ login_response.json.value }}"
-        validate_certs: no
+        validate_certs: "{{ validate_certs }}"
       register: vm_list_response
 
-    
     - name: Mostrar la lista de máquinas virtuales
       debug:
         var: vm_list_response.json
@@ -53,5 +53,3 @@
         msg: "VM {{ item.vm }} tiene la IP: {{ item.json.value[0].ip_addresses[0] }}"
       loop: "{{ vm_ip_response.results }}"
       when: item.json.value is defined and item.json.value | length > 0
-
-
