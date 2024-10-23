@@ -8,7 +8,15 @@
     
     - name: "Liverpool | Actualización RHEL | Obtener respaldos y parchado de maquinas"
       when: make_snapshot == "Si"
-      block:  
+      block:
+
+        - name: Mensaje
+          debug:
+            msg: |
+                  '{{ lookup("env", "VMWARE_HOST") }}'
+                  '{{ lookup("env", "VMWARE_USER") }}'
+                  '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        - meta: end_host
 
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
           community.vmware.vmware_vm_info:
