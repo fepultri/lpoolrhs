@@ -20,13 +20,17 @@
 
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
           community.vmware.vmware_vm_info:
-            hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
-            username: "automation"
+            hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+            username: "automation@VMWARE.LIVERPOOL.COM.MX" 
             password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
-            validate_certs: no
+            validate_certs: False  # Cambia a True si usas certificados válidos
           delegate_to: localhost
           register: result_vmware_info
-          
+#            hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
+#            username: "automation"
+#            password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
+#            validate_certs: no
+        
         #- name: "Liverpool | Actualización RHEL | Obtener informacion de maquina virtual con IP  en VMWare"
         #  ansible.builtin.set_fact:
         #    vmware_vm_info: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='guest_name')| list  }}"
