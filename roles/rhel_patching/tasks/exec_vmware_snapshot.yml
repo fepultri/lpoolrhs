@@ -21,7 +21,7 @@
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
           community.vmware.vmware_vm_info:
             hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
-            username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
+            username: "automation"
             password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
             validate_certs: no
           delegate_to: localhost
