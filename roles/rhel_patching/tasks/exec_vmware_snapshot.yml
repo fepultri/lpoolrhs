@@ -20,18 +20,18 @@
 
         - name: "Liverpool | Actualización RHEL | Obtener informacion de maquinas virtuales en VMWare"
           community.vmware.vmware_vm_info:
-            hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+            hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
             username: '{{ lookup("env", "VMWARE_USER") }}'
             password: 'An5¡bl3_au70m4t¡0n'
             validate_certs: no
           delegate_to: localhost
           register: result_vmware_info
           
-        - name: "Liverpool | Actualización RHEL | Obtener informacion de maquina virtual con IP  en VMWare"
-          ansible.builtin.set_fact:
-            vmware_vm_info: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='guest_name')| list  }}"
+        #- name: "Liverpool | Actualización RHEL | Obtener informacion de maquina virtual con IP  en VMWare"
+        #  ansible.builtin.set_fact:
+        #    vmware_vm_info: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='guest_name')| list  }}"
             #vm_moid: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='moid')| list  }}"
-            vm_folder: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='folder')| list  }}"
+        #    vm_folder: "{{ result_vmware_info.virtual_machines | selectattr('ip_address','eq',ansible_host) | map(attribute='folder')| list  }}"
 
        # - name: "Liverpool | Actualización RHEL | Formateo de variable "
        #   ansible.builtin.set_fact:
