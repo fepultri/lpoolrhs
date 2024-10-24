@@ -5,7 +5,7 @@
   vars:
     vcenter_host: '{{ lookup("env", "VMWARE_HOST") }}'
     vcenter_user: 'automation' 
-    vcenter_password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+    vcenter_password: '{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}'
     validate_certs: False  # Cambia a True si usas certificados válidos
 
   tasks:
