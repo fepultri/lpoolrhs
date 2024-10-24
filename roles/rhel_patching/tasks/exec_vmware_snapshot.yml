@@ -54,7 +54,7 @@
             folder: "{{ vm_folder[0] }}"
             #folder: "{{ result_vmware_info.virtual_machines.0.folder }}"
             #moid: "{{ vm_moid[0] }}"
-            name: "{{ vmware_vm_info[0] | trim | upper }}"
+            name: "{{ vmware_vm_info[0] }}"
             state: present
             snapshot_name: "{{ snapshot_name }}"
             validate_certs: no
