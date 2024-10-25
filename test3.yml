@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    vcenter_hostname: "qrovcapac01.vmware.liverpool.com.mx"
+    vcenter_hostname: "stfvcapac01.vmware.liverpool.com.mx"
     telnet_port: 443
 
   tasks:
