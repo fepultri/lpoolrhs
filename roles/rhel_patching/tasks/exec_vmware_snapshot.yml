@@ -41,6 +41,12 @@
         #  ansible.builtin.set_fact:
         #    vm_info: "{{ vmware_vm_info[0] | trim }}"
 
+         - name: Formatear la fecha para el nombre del snapshot
+           ansible.builtin.set_fact:
+              snapshot_date: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}_{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}"
+
+    - name: Obtener información del hostname de la VM
+
         - name: "Liverpool | Actualización RHEL | Generar nombre de snapshot"
           ansible.builtin.set_fact: 
             snapshot_name: "{{ vmware_vm_info[0]_ansible_date_time.date }}" 
@@ -56,7 +62,7 @@
             #moid: "{{ vm_moid[0] }}"
             name: "{{ vmware_vm_info[0] }}"
             state: present
-            snapshot_name: "{{ snapshot_name }}"
+            snapshot_name: "{{ snapshot_name }}_{{ snapshot_date }}"
             validate_certs: no
           delegate_to: localhost
           register: result_vmware_snapshot
