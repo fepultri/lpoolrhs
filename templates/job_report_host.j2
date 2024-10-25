@@ -23,7 +23,7 @@
 
         <li>IP addresses: {{ hostvars[thehost]['ansible_all_ipv4_addresses'] | d(['unknown']) | join(', ') }}</li>
 
-        <li>ID Snapshot: {{ hostvars[thehost]['snapshot_name'] ['snapshot_date'] | d(['unknown']) }}</li>
+        <li>ID Snapshot: {{ hostvars[thehost]['snapshot_name'] | d(['unknown']) }}</li>
 
       </ul>
  
