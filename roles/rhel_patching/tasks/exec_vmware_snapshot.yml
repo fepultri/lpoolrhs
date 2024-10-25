@@ -43,7 +43,7 @@
 
         - name: "Liverpool | Actualización RHEL | Generar nombre de snapshot"
           ansible.builtin.set_fact: 
-            snapshot_name: "{{ vmware_vm_info[0] }}"
+            snapshot_name: "{{ vmware_vm_info[0]_ansible_date_time.date }}" 
         
         - name: "Liverpool | Actualización RHEL | Generar snapshot"
           community.vmware.vmware_guest_snapshot:
