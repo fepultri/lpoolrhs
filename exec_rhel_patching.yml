@@ -54,6 +54,7 @@
       success_list: '{{ hostvars | dict2items | json_query(success_query) }}'
       failed_list: '{{ hostvars | dict2items | json_query(failed_query) }}'
       missing_list: '{{ hostvars | dict2items | json_query(missing_query) }}'
+      dtg: "Current time (UTC): {{ now(utc=true,fmt='%Y-%m-%d %H:%M:%S') }}"
     vars:
       kernel_query: "*.ansible_kernel"
       success_query: "[?value.job_success==`true`].key"
