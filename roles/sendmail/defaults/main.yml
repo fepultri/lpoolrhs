@@ -8,7 +8,7 @@ smtp_password: ''
 
 # Configuración del correo
 email_from: 'ansible@liverpool.com.mx'
-email_to: 'fpulido@redhat.com'
+email_to: 'fpulido1@redhat.com'
 email_subject: 'Notificación Ansible'
 email_body: 'Esta es una notificación automática de Ansible.'
 
